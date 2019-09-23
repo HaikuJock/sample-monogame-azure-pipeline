@@ -1,0 +1,71 @@
+# .NET Desktop
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+#trigger:
+#- release
+# Either trigger off your release branch 
+# or after the Windows build (which triggers off release but also runs unit tests)
+
+pool:
+  vmImage: 'macos-latest'
+
+variables:
+  solution: '**/sample-monogame-azure-pipeline-mac.sln'
+  buildPlatform: 'any cpu'
+  buildConfiguration: 'Release'
+
+steps:
+# To manually select a Xamarin SDK version on the Microsoft-hosted macOS agent,
+# configure this task with the *Mono* version that is associated with the
+# Xamarin SDK version that you need, and set the "enabled" property to true.
+# See https://go.microsoft.com/fwlink/?linkid=871629
+- script: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh 5_16_0
+  displayName: 'Select the Xamarin SDK version'
+  enabled: True
+
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: sdk
+    version: 2.2.402
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: ShellScript@2
+  inputs:
+   scriptPath: '$(Build.SourcesDirectory)/azure_set_mono.sh'
+   failOnStandardError: True
+  
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: MSBuild@1
+  inputs:
+   solution: '$(solution)'
+   platform: '$(buildPlatform)'
+   configuration: '$(buildConfiguration)'
+
+- task: ShellScript@2
+  inputs:
+    scriptPath: '$(Build.SourcesDirectory)/Butler/compress-mac-build.sh'
+    args: '$(Build.SourcesDirectory)/App.Mac/bin/Release'
+    failOnStandardError: false
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.SourcesDirectory)/Butler/SampleApp.app.zip'
+    artifactName: 'SampleApp Mac'
+    
+- task: ShellScript@2
+  inputs:
+    scriptPath: '$(Build.SourcesDirectory)/Butler/download-butler.sh'
+    failOnStandardError: false
+
+- task: ShellScript@2
+  inputs:
+    scriptPath: '$(Build.SourcesDirectory)/Butler/upload-mac.sh'
+    failOnStandardError: false

@@ -1,0 +1,71 @@
+# .NET Desktop
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+trigger:
+- release
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/sample-monogame-azure-pipeline-win.sln'
+  buildPlatform: 'x64'
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '2.0.0'
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    publishWebProjects: False
+    arguments: '"App.Win\App.Win.csproj" --framework netcoreapp2.0 --runtime win-x64 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --self-contained'
+    zipAfterPublish: True
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'SampleApp Windows'
+
+- task: BatchScript@1
+  inputs:
+    filename: '$(Build.SourcesDirectory)\Butler\download-butler.bat'
+    arguments: '$(Build.SourcesDirectory)\Butler'
+    failOnStandardError: False
+    workingFolder: '$(Build.SourcesDirectory)\Butler'
+    modifyEnvironment: True
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '$(Build.SourcesDirectory)\Butler\butler.zip' 
+    destinationFolder: '$(Build.SourcesDirectory)\Butler'
+    cleanDestinationFolder: false
+
+- task: BatchScript@1
+  inputs:
+    filename: '$(Build.SourcesDirectory)\Butler\upload-windows.bat'
+    arguments: '$(Build.ArtifactStagingDirectory)'
+    failOnStandardError: True
+    workingFolder: '$(Build.SourcesDirectory)\Butler'
+    modifyEnvironment: True

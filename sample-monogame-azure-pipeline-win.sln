@@ -1,8 +1,6 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Mac", "App.Mac\App.Mac.csproj", "{1EC0F950-DCF9-4C2D-8C90-71192B3E5BCE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Butler", "Butler", "{2A141738-832C-46ED-8EC0-5B27D4776147}"
 	ProjectSection(SolutionItems) = preProject
 		Butler\compress-mac-build.sh = Butler\compress-mac-build.sh
@@ -25,9 +23,5 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1EC0F950-DCF9-4C2D-8C90-71192B3E5BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EC0F950-DCF9-4C2D-8C90-71192B3E5BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EC0F950-DCF9-4C2D-8C90-71192B3E5BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EC0F950-DCF9-4C2D-8C90-71192B3E5BCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
