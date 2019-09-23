@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+
+<PropertyGroup>
+
+  <OutputType>WinExe</OutputType>
+
+  <TargetFramework>netcoreapp2.0</TargetFramework>
+
+  <AssemblyName>SampleApp</AssemblyName>
+
+  <RootNamespace>Haiku.Sample</RootNamespace>
+
+  <Configurations>Debug;Release</Configurations>
+
+  <Platforms>AnyCPU;x64</Platforms>
+
+  <Copyright>Haiku Interactive Limited</Copyright>
+
+  <Company>Haiku Interactive Limited</Company>
+
+  <Authors>Jock Findlay</Authors>
+
+  <Version>1.0.0</Version>
+
+  <PackageId>SampleApp</PackageId>
+
+</PropertyGroup>
+
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+</PropertyGroup>
+
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+</PropertyGroup>
+
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <DefineConstants>TRACE;WINDOWS</DefineConstants>
+</PropertyGroup>
+
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <DefineConstants>TRACE;WINDOWS</DefineConstants>
+</PropertyGroup>
+
+
+<ItemGroup>
+    <Compile Include="..\Shared\SampleApp.cs" Link="SampleApp.cs" />
+    <Compile Include="..\Shared\Program.cs" Link="Program.cs" />
+</ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
+  </ItemGroup>
+
+<ItemGroup>
+  <Folder Include="Content\" />
+</ItemGroup>
+
+<ItemGroup>
+  <MonoGameContentReference Include="..\Shared\Content\ContentWin.mgcb" Link="Content\ContentWin.mgcb" />
+</ItemGroup>
+
+</Project>
