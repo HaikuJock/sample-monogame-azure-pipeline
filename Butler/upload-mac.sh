@@ -25,7 +25,7 @@ export BUTLER_API_KEY=$BUTLERAPIKEY
 # To actually upload comment out this section...
 
 echo "Dry run, not pushing, would have executed:"
-echo '"${BUTLER_DIRECTORY}/butler" push "${BUTLER_DIRECTORY}/SampleApp.app.zip" ${ITCHCREATORNAME}/${ITCHAPPNAME}:${ITCHCHANNELNAME}'
+echo "${BUTLER_DIRECTORY}/butler push ${BUTLER_DIRECTORY}/SampleApp.app.zip ${ITCHCREATORNAME}/${ITCHAPPNAME}:${ITCHCHANNELNAME}"
 
 # ... and uncomment this section
 
